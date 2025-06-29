@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -7,8 +8,10 @@ public class EnemyScript : MonoBehaviour
     public float speed = 0.1f;
     public float stopDistance = 0.1f;
     int i = 1;
-
+    public DamWallScript wallTarget;
+    public ParticleSystem deathParticle;
     private Rigidbody rb;
+    bool isAttacking = false;
 
     void Start()
     {
@@ -22,7 +25,7 @@ public class EnemyScript : MonoBehaviour
         float distance = direction.magnitude;
 
         Quaternion lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = lookRotation * Quaternion.Euler(0, 90f, 0); 
+        transform.rotation = lookRotation * Quaternion.Euler(0, 90f, 0);
 
         if (distance > stopDistance)
         {
@@ -35,7 +38,33 @@ public class EnemyScript : MonoBehaviour
         }
         else
         {
-            rb.linearVelocity = Vector3.zero;
+            if (!isAttacking)
+            {
+                isAttacking = true;
+                rb.linearVelocity = Vector3.zero;
+                StartCoroutine(Attack());
+            }
+        }
+    }
+
+    IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(2);
+        wallTarget.LooseHealth(12);
+        isAttacking = false;
+    }
+
+    public void Die()
+    {
+        deathParticle.Play();
+        deathParticle.gameObject.transform.parent = null;
+        Destroy(gameObject, 0.2f);
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.tag == "Trap")
+        {
+            Destroy(other.gameObject, 2);
         }
     }
 }

@@ -9,9 +9,5 @@ public class MenuManagerScript : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void ResetGame()
-    {
-        SceneManager.LoadScene(1);
-    }
 
 }

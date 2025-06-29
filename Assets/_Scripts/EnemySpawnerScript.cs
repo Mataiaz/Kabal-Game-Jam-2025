@@ -5,7 +5,7 @@ using System.Collections;
 public class EnemySpawnerScript : MonoBehaviour
 {
     public GameObject path;
-
+    public DamWallScript damWall;
     private List<Transform> pathSteps = new List<Transform>();
 
     bool isSpawning = false;
@@ -37,7 +37,9 @@ public class EnemySpawnerScript : MonoBehaviour
 
         while (i > 0) {
             GameObject spawnedEnemy = Instantiate(enemy, pathSteps[0].position, Quaternion.identity);
-            spawnedEnemy.GetComponent<EnemyScript>().targets = pathSteps;
+            EnemyScript enemyScript = spawnedEnemy.GetComponent<EnemyScript>();
+            enemyScript.targets = pathSteps;
+            enemyScript.wallTarget = damWall;
             yield return new WaitForSeconds(delay);
             i--;
         }

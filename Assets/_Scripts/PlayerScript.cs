@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,18 +7,26 @@ public class PlayerCharacter : MonoBehaviour
     public GameObject characterCamera;
     private Rigidbody rb;
     private Vector3 movementInput;
-    
     private float cameraPitch = 0f;
     public float mouseSensitivity = 2f;
+    public GameObject[] tools;
+    public int lastToolUsed = -1;
+    public GameObject placement;
+    public GameObject trap;
+    public bool canFix = false;
 
-void Start() {
-    rb = GetComponent<Rigidbody>();
-}
+    public List<GameObject> leaks = new List<GameObject>();
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
 
     private void Update()
     {
-
+        HandleToolSelection();
+        HandleToolAction();
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
@@ -39,17 +48,94 @@ void Start() {
         float moveZ = Input.GetAxisRaw("Vertical");
         movementInput = (camForward * moveZ + camRight * moveX).normalized;
         rb.MovePosition(transform.position + movementInput * Time.deltaTime * 5f);
-    
-}
+
+    }
 
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         Movement();
     }
 
-    private void Movement() {
+    private void Movement()
+    {
         if (rb != null)
             rb.MovePosition(transform.position + movementInput * Time.deltaTime * 5f);
     }
 
+    void HandleToolSelection()
+    {
+        if (lastToolUsed > -1
+        && (Input.GetKeyDown(KeyCode.Alpha1)
+        || Input.GetKeyDown(KeyCode.Alpha2)
+        || Input.GetKeyDown(KeyCode.Alpha3)
+        || Input.GetKeyDown(KeyCode.Alpha4)))
+        {
+            canFix = true;
+            tools[lastToolUsed].gameObject.SetActive(false);
+            placement.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            tools[0].gameObject.SetActive(true);
+            lastToolUsed = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            tools[1].gameObject.SetActive(true);
+            placement.SetActive(true);
+            lastToolUsed = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            tools[2].gameObject.SetActive(true);
+            lastToolUsed = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            tools[3].gameObject.SetActive(true);
+            canFix = false;
+            lastToolUsed = 3;
+        }
+    }
+
+    void HandleToolAction()
+    {
+        if (placement.activeSelf && Input.GetKeyDown(KeyCode.E))
+        {
+            Instantiate(trap, placement.transform.position, placement.transform.rotation);
+        }
+
+        if (canFix && leaks.Count > 0 && Input.GetKeyDown(KeyCode.E))
+        {
+            foreach (GameObject l in leaks)
+            {
+                if (Vector3.Distance(l.transform.position, gameObject.transform.position) < 0.7f)
+                {
+                    Destroy(l);
+                }
+            }
+        }
+    }
+
+  void OnTriggerEnter(Collider other)
+  {
+    if (other.tag == "leak" && !leaks.Contains(other.gameObject)) {
+        leaks.Add(other.gameObject);
+    }
+  }
+
 }
+
+/*
+
+fix rounds so that enemies can keep coming
+round check where you can buy more traps & (5 for trap, 100 for repairment, money for each beaver killed)
+build the game so it can be played on the web
+finish creating gun, long reload time
+implement sounds
+
+
+
+*/
