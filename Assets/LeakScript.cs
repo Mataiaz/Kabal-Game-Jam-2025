@@ -8,6 +8,7 @@ public class LeakScript : MonoBehaviour
     bool isLoosingWater = false;
     void Awake()
     {
+        gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManagerScript>();
         gameManager.UpdateDamLeakStatus(1);
     }
 

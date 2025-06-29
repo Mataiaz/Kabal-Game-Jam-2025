@@ -134,9 +134,10 @@ GameObject:
   - component: {fileID: 1550491152580329364}
   - component: {fileID: 4918647593129312490}
   - component: {fileID: 1711738243677521469}
+  - component: {fileID: 1665344901898696989}
   m_Layer: 0
   m_Name: beaver
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -326,6 +327,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &1665344901898696989
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6233278487227001574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.1
+  m_Direction: 0
+  m_Center: {x: -0.08, y: 0, z: 0}
 --- !u!1 &7509980423205587212
 GameObject:
   m_ObjectHideFlags: 0

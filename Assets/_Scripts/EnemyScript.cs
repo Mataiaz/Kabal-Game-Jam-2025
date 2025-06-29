@@ -69,6 +69,7 @@ public class EnemyScript : MonoBehaviour
         if (other.tag == "Trap")
         {
             Destroy(other.gameObject, 2);
+            Die();
         }
     }
 }

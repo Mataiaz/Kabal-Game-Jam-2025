@@ -29,6 +29,8 @@ public class PlayerCharacter : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
 
@@ -126,6 +128,8 @@ public class PlayerCharacter : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") && lastToolUsed == 0)
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             if (audioSource.clip == clips[0] && audioSource.isPlaying)
             {
                 audioSource.Stop();
