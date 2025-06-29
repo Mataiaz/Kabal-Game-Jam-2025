@@ -27,6 +27,8 @@ public class GameManagerScript : MonoBehaviour
 
     public DamWallScript[] damWallScripts;
 
+    bool isValidating = false;
+
   void Update()
   {
         if (Input.GetKeyDown(KeyCode.R) && isGameOver)
@@ -42,6 +44,12 @@ public class GameManagerScript : MonoBehaviour
             roundStarted = true;
             round++;
             StartRound(round);
+        }
+
+        if (roundStarted && !isValidating)
+        {
+            isValidating = true;
+            StartCoroutine(ValidateRound(5f));
         }
 
         if (damWaterLvl < 1000)
@@ -80,11 +88,10 @@ public class GameManagerScript : MonoBehaviour
         int enemyToSpawn;
         foreach (EnemySpawnerScript ess in spawners)
         {
-            enemyToSpawn = Random.Range(1 * round, 5 * round);
+            enemyToSpawn = Random.Range(5 * round, 10 * round);
             ess.SpawnEnemies(enemy, enemyToSpawn, Random.Range(1, 3));
             enemyCount = enemyToSpawn + enemyToSpawn;
         }
-        //StartCoroutine(ValidateRound());
     }
 
     public void GameOver()
@@ -175,13 +182,19 @@ public class GameManagerScript : MonoBehaviour
         slider.value = damWaterLvl / 1000;
     }
 
-    //private IEnumerator ValidateRound()
-    //{
-    //    yield return new WaitForSeconds(5);
-    //
-    //    
-    //    while (actualEnemyCount)
-    //        yield return new WaitForSeconds(delay);
-    //}
+    private IEnumerator ValidateRound(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        enemyCount = 0;
+        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            enemyCount++;
+        }
+        if (enemyCount <= 0)
+        {
+            isValidating = false;
+            roundStarted = false;
+        }
+    }
 
 }

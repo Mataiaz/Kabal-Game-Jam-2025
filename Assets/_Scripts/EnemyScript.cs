@@ -7,6 +7,8 @@ public class EnemyScript : MonoBehaviour
     public List<Transform> targets = new List<Transform>();
     public float speed = 0.1f;
     public float stopDistance = 0.1f;
+    public AudioSource audioSource;
+    public AudioClip[] clips;
     int i = 1;
     public DamWallScript wallTarget;
     public ParticleSystem deathParticle;
@@ -50,6 +52,8 @@ public class EnemyScript : MonoBehaviour
     IEnumerator Attack()
     {
         yield return new WaitForSeconds(2);
+        audioSource.clip = clips[0];
+        audioSource.Play();
         wallTarget.LooseHealth(12);
         isAttacking = false;
     }
